@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Lumiatech company profile and landing page for engineering technology solutions.">
+    <title>Lumiatech - Discover Engineering Technology</title>
+    <link rel="preload" href="assets/hero-engineering-lab.png" as="image">
+    <link rel="stylesheet" href="styles.css">
+    <script src="site-data.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#home" aria-label="Lumiatech home">
+        <span class="brand__mark">L</span>
+        <span class="brand__text" data-brand-name>Lumiatech</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary navigation" data-desktop-nav></nav>
+
+      <div class="header-actions">
+        <div class="language-switcher" aria-label="Language switcher">
+          <button type="button" data-locale-button="en">EN</button>
+          <button type="button" data-locale-button="id">ID</button>
+          <button type="button" data-locale-button="zh">中文</button>
+        </div>
+        <a class="button button--small button--solid" href="#contact" data-nav-cta>Contact Us</a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" data-menu-toggle>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="mobile-panel" data-mobile-panel>
+      <nav aria-label="Mobile navigation" data-mobile-nav></nav>
+    </div>
+
+    <main>
+      <section class="hero" id="home">
+        <img class="hero__image" src="assets/hero-engineering-lab.png" alt="">
+        <div class="hero__shade"></div>
+        <div class="hero__grid"></div>
+        <div class="container hero__content">
+          <p class="eyebrow" data-hero-eyebrow>Engineering technology company</p>
+          <h1 data-hero-title>Discover Engineering Technology</h1>
+          <p class="hero__lead" data-hero-description></p>
+          <div class="hero__actions">
+            <a class="button button--solid" href="#solutions" data-hero-primary></a>
+            <a class="button button--ghost" href="#contact" data-hero-secondary></a>
+          </div>
+          <div class="hero__tags" data-hero-tags></div>
+          <div class="hero__stats" data-hero-stats></div>
+        </div>
+      </section>
+
+      <section class="partner-strip section--compact" aria-label="Partner logos">
+        <div class="container">
+          <div class="partner-strip__header">
+            <span data-partner-label>Partners / Clients / Collaborations</span>
+            <span class="line"></span>
+          </div>
+          <div class="partner-grid" data-partners></div>
+        </div>
+      </section>
+
+      <section class="section about-section" id="about">
+        <div class="container about-layout">
+          <div class="section-copy reveal">
+            <p class="eyebrow" data-about-eyebrow></p>
+            <h2 data-about-title></h2>
+          </div>
+          <div class="about-panel reveal">
+            <p data-about-body></p>
+            <ul data-about-bullets></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="solutions">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow" data-solutions-eyebrow>Solutions</p>
+            <h2 data-solutions-title>Four divisions. One engineering delivery system.</h2>
+          </div>
+          <div class="solution-grid" data-solutions></div>
+        </div>
+      </section>
+
+      <section class="section products-section" id="products">
+        <div class="container">
+          <div class="section-heading section-heading--split reveal">
+            <div>
+              <p class="eyebrow" data-products-eyebrow>Featured Products</p>
+              <h2 data-products-title>Product concepts ready to become a full catalog.</h2>
+            </div>
+            <div class="filter-pills" data-product-filters></div>
+          </div>
+          <div class="product-grid" data-products></div>
+        </div>
+      </section>
+
+      <section class="section why-section">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow" data-why-eyebrow>Why Choose Us</p>
+            <h2 data-why-title>Practical engineering, documented delivery, secure product thinking.</h2>
+          </div>
+          <div class="why-grid" data-why></div>
+        </div>
+      </section>
+
+      <section class="section remote-section">
+        <div class="container remote-layout reveal">
+          <div>
+            <p class="eyebrow" data-remote-eyebrow>Remote Collaboration</p>
+            <h2 data-remote-title></h2>
+          </div>
+          <p data-remote-body></p>
+        </div>
+      </section>
+
+      <section class="section" id="team">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="eyebrow" data-team-eyebrow>Employee / Team</p>
+            <h2 data-team-title>Lean team structure for focused execution.</h2>
+          </div>
+          <div class="team-grid" data-team></div>
+        </div>
+      </section>
+
+      <section class="section academic-career">
+        <div class="container academic-career__grid">
+          <div class="content-block reveal" id="academic">
+            <p class="eyebrow" data-academic-eyebrow>Academic</p>
+            <h2 data-academic-title>Research, internship, and university collaboration.</h2>
+            <div class="mini-list" data-academic></div>
+          </div>
+          <div class="content-block reveal" id="career">
+            <p class="eyebrow" data-career-eyebrow>Career</p>
+            <h2 data-career-title>Remote-friendly roles for builders.</h2>
+            <div class="job-list" data-careers></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contact">
+        <div class="container contact-layout">
+          <div class="contact-copy reveal">
+            <p class="eyebrow" data-contact-eyebrow>Contact Us</p>
+            <h2 data-contact-title></h2>
+            <div class="contact-meta">
+              <a data-contact-email href="#"></a>
+              <a data-contact-phone href="#"></a>
+              <span data-contact-address></span>
+            </div>
+          </div>
+          <form class="contact-form reveal" data-contact-form>
+            <label>
+              <span data-form-label="name">Name</span>
+              <input type="text" name="name" required>
+            </label>
+            <label>
+              <span data-form-label="email">Email</span>
+              <input type="email" name="email" required>
+            </label>
+            <label>
+              <span data-form-label="interest">Interest</span>
+              <select name="interest" data-interest-select></select>
+            </label>
+            <label>
+              <span data-form-label="message">Message</span>
+              <textarea name="message" rows="4" required></textarea>
+            </label>
+            <button class="button button--solid" type="submit" data-form-submit>Send Message</button>
+            <p class="form-status" data-form-status></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-layout">
+        <div>
+          <a class="brand" href="#home" aria-label="Lumiatech home">
+            <span class="brand__mark">L</span>
+            <span class="brand__text" data-footer-brand>Lumiatech</span>
+          </a>
+          <p data-footer-tagline></p>
+        </div>
+        <nav data-footer-nav aria-label="Footer navigation"></nav>
+      </div>
+    </footer>
+  </body>
+</html>

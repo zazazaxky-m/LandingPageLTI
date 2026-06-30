@@ -1,0 +1,1 @@
+ALTER TABLE "CompanySetting" ADD COLUMN "cursorVariant" TEXT NOT NULL DEFAULT 'GLOW';

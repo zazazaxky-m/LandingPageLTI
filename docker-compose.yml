@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lumiatech-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lumiatech
+      POSTGRES_PASSWORD: lumiatech
+      POSTGRES_DB: lumiatech
+    ports:
+      - "5432:5432"
+    volumes:
+      - lumiatech_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lumiatech -d lumiatech"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      target: runner
+    container_name: lumiatech-app
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - lumiatech_uploads:/app/public/uploads
+
+volumes:
+  lumiatech_postgres_data:
+  lumiatech_uploads:

@@ -1,0 +1,123 @@
+import Link from "next/link";
+import { Plus, Search } from "lucide-react";
+
+import { AcademicRowActions } from "@/components/admin/academic-row-actions";
+import { Badge } from "@/components/ui/badge";
+import { buttonClasses } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Table, Td, Th } from "@/components/ui/table";
+import { getAdminAcademic, parseAdminAcademicFilters } from "@/features/academic/academic-service";
+
+type AdminAcademicPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const statusOptions = [
+  ["", "All statuses"],
+  ["DRAFT", "Draft"],
+  ["PUBLISHED", "Published"],
+  ["ARCHIVED", "Archived"]
+] as const;
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminAcademicPage({ searchParams }: AdminAcademicPageProps) {
+  const filters = parseAdminAcademicFilters(await searchParams);
+  const content = await getAdminAcademic(filters);
+
+  return (
+    <div className="grid gap-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-lumen-400">Academic</p>
+          <h1 className="mt-2 text-3xl font-black">Academic / Research / Collaboration</h1>
+          <p className="mt-3 max-w-2xl leading-7 text-zinc-400">
+            Manage academic programs, research, internship, training, workshop, student project, and publication content.
+          </p>
+        </div>
+        <Link className={buttonClasses("solid")} href="/admin/academic/new">
+          <Plus className="h-4 w-4" />
+          Add content
+        </Link>
+      </div>
+
+      <Card className="p-4">
+        <form className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_auto_auto]">
+          <label className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+            <Input className="pl-9" defaultValue={filters.query} name="q" placeholder="Search academic content" />
+          </label>
+          <Select defaultValue={filters.category} name="category">
+            <option value="">All categories</option>
+            {content.categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </Select>
+          <Select defaultValue={filters.status} name="status">
+            {statusOptions.map(([value, label]) => (
+              <option key={value || "all"} value={value}>
+                {label}
+              </option>
+            ))}
+          </Select>
+          <button className={buttonClasses("solid")} type="submit">
+            Filter
+          </button>
+          <Link className={buttonClasses("ghost")} href="/admin/academic">
+            Reset
+          </Link>
+        </form>
+      </Card>
+
+      {content.items.length > 0 ? (
+        <Table>
+          <thead>
+            <tr>
+              <Th>Content</Th>
+              <Th>Category</Th>
+              <Th>Status</Th>
+              <Th>Published</Th>
+              <Th>Updated</Th>
+              <Th>Actions</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {content.items.map((item) => (
+              <tr key={item.id}>
+                <Td>
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-11 w-16 shrink-0 place-items-center overflow-hidden rounded-ui border border-white/10 bg-charcoal-800 text-xs font-black text-lumen-400">
+                      {item.imageUrl ? <img alt={item.title} className="h-full w-full object-cover" src={item.imageUrl} /> : item.title.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-black text-white">{item.title}</p>
+                      <p className="mt-1 text-xs text-zinc-500">/{item.slug}</p>
+                    </div>
+                  </div>
+                </Td>
+                <Td>{item.category}</Td>
+                <Td>
+                  <Badge>{item.status}</Badge>
+                </Td>
+                <Td>{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString("en-GB") : "-"}</Td>
+                <Td>{new Date(item.updatedAt).toLocaleDateString("en-GB")}</Td>
+                <Td>
+                  <AcademicRowActions academicId={item.id} status={item.status} />
+                </Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <Card className="p-8">
+          <h2 className="text-lg font-black text-white">No academic content found</h2>
+          <p className="mt-3 text-zinc-400">Create content or clear the filters.</p>
+        </Card>
+      )}
+    </div>
+  );
+}

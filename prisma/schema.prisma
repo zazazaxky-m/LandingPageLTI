@@ -1,0 +1,359 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  EN
+  ID
+  ZH
+}
+
+enum UserRole {
+  ADMIN
+}
+
+enum VisibilityStatus {
+  VISIBLE
+  HIDDEN
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PartnerType {
+  CLIENT
+  PARTNER
+  ACADEMIC
+  VENDOR
+  COLLABORATION
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum WorkType {
+  ONSITE
+  HYBRID
+  REMOTE
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  FREELANCE
+}
+
+enum CareerStatus {
+  DRAFT
+  OPEN
+  CLOSED
+}
+
+enum ContactInterest {
+  ENGINEERING_PROTOTYPE
+  IT_SOLUTION
+  MOBILE_APP
+  CYBER_SECURITY
+  PARTNERSHIP
+  CAREER
+  ACADEMIC
+  OTHER
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         UserRole @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CompanySetting {
+  id                    String   @id @default(cuid())
+  companyName           String   @default("Lumiatech")
+  tagline               String   @default("Discover Engineering Technology")
+  shortDescription      String?
+  longDescription       String?  @db.Text
+  vision                String?  @db.Text
+  mission               String?  @db.Text
+  address               String?
+  email                 String?
+  phone                 String?
+  socialLinks           Json?
+  logoUrl               String?
+  faviconUrl            String?
+  cursorVariant         String   @default("GLOW")
+  mainCtaText           String?
+  mainCtaUrl            String?
+  remoteHighlightTitle  String?
+  remoteHighlightBody   String?  @db.Text
+  defaultLocale         Locale   @default(ID)
+  seoTitle              String?
+  seoDescription        String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Division {
+  id               String           @id @default(cuid())
+  name             String
+  slug             String           @unique
+  shortDescription String?
+  description      String?          @db.Text
+  icon             String?
+  imageUrl         String?
+  memberCount      Int?
+  status           VisibilityStatus @default(VISIBLE)
+  sortOrder        Int              @default(0)
+  products         Product[]
+  employees        Employee[]
+  careers          Career[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([status, sortOrder])
+}
+
+model Product {
+  id               String                 @id @default(cuid())
+  name             String
+  slug             String                 @unique
+  shortDescription String?
+  fullDescription  String?                @db.Text
+  category         String?
+  divisionId       String?
+  division         Division?              @relation(fields: [divisionId], references: [id], onDelete: SetNull)
+  youtubeUrl       String?
+  useCases         String[]               @default([])
+  status           ProductStatus          @default(DRAFT)
+  featured         Boolean                @default(false)
+  sortOrder        Int                    @default(0)
+  seoTitle         String?
+  seoDescription   String?
+  images           ProductImage[]
+  features         ProductFeature[]
+  specifications   ProductSpecification[]
+  techStack        ProductTechStack[]
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  @@index([status, featured, sortOrder])
+  @@index([divisionId])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  altText   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, sortOrder])
+}
+
+model ProductFeature {
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  title       String
+  description String?  @db.Text
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productId, sortOrder])
+}
+
+model ProductSpecification {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     String
+  value     String
+  unit      String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, sortOrder])
+}
+
+model ProductTechStack {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  version   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, sortOrder])
+}
+
+model Partner {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  logoUrl     String?
+  websiteUrl  String?
+  description String?          @db.Text
+  type        PartnerType      @default(PARTNER)
+  featured    Boolean          @default(false)
+  sortOrder   Int              @default(0)
+  status      VisibilityStatus @default(VISIBLE)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([status, featured, sortOrder])
+}
+
+model Employee {
+  id                String          @id @default(cuid())
+  name              String
+  slug              String          @unique
+  role              String
+  divisionId        String?
+  division          Division?       @relation(fields: [divisionId], references: [id], onDelete: SetNull)
+  photoUrl          String?
+  shortBio          String?         @db.Text
+  experienceHistory String?         @db.Text
+  linkedinUrl       String?
+  githubUrl         String?
+  portfolioUrl      String?
+  email             String?
+  status            EmployeeStatus  @default(ACTIVE)
+  sortOrder         Int             @default(0)
+  skills            EmployeeSkill[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([divisionId])
+  @@index([status, sortOrder])
+}
+
+model EmployeeSkill {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  name       String
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([employeeId, sortOrder])
+}
+
+model AcademicContent {
+  id               String        @id @default(cuid())
+  title            String
+  slug             String        @unique
+  category         String
+  shortDescription String?
+  content          String?       @db.Text
+  imageUrl         String?
+  publishedAt      DateTime?
+  status           ContentStatus @default(DRAFT)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Career {
+  id                String         @id @default(cuid())
+  jobTitle          String
+  slug              String         @unique
+  divisionId        String?
+  division          Division?      @relation(fields: [divisionId], references: [id], onDelete: SetNull)
+  location          String?
+  workType          WorkType       @default(REMOTE)
+  employmentType    EmploymentType @default(FULL_TIME)
+  shortDescription  String?
+  requirements      String?        @db.Text
+  responsibilities  String?        @db.Text
+  benefits          String?        @db.Text
+  status            CareerStatus   @default(DRAFT)
+  applyUrl          String?
+  applyEmail        String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@index([divisionId])
+  @@index([status, workType, employmentType])
+}
+
+model ContactSubmission {
+  id               String          @id @default(cuid())
+  name             String
+  email            String
+  company          String?
+  phone            String?
+  subject          String
+  message          String          @db.Text
+  interestCategory ContactInterest
+  status           ContactStatus   @default(NEW)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([status, createdAt])
+  @@index([interestCategory])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  key       String   @unique
+  url       String
+  mimeType  String
+  size      Int
+  provider  String   @default("local")
+  altText   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Translation {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  field      String
+  locale     Locale
+  value      String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([entityType, entityId, field, locale])
+  @@index([entityType, entityId, locale])
+}

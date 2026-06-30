@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+dist
+.env
+.env*.local
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.next-dev.log
+dev-server.log
+dev-server.err.log
+.DS_Store
+
+# Referensi
+dewesoft/
+entaniya/
+saveweb2zip-com-dewesoft-com/
+saveweb2zip-com-e-products-entaniya-co-jp/
