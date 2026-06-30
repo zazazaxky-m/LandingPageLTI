@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+export const dynamic = "force-dynamic";
+
 import { locales } from "@/i18n/config";
 import { prisma } from "@/lib/prisma";
 
