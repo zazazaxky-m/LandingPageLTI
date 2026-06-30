@@ -33,6 +33,28 @@ services:
     volumes:
       - lumiatech_uploads:/app/public/uploads
 
+  migrator:
+    build:
+      context: .
+      target: migrator
+    container_name: lumiatech-migrator
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  seeder:
+    build:
+      context: .
+      target: seeder
+    container_name: lumiatech-seeder
+    env_file:
+      - .env
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+
 volumes:
   lumiatech_postgres_data:
   lumiatech_uploads:
